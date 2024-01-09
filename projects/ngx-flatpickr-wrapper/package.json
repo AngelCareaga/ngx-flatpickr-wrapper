@@ -1,0 +1,47 @@
+{
+  "name": "ngx-flatpickr-wrapper",
+  "description": "Angular wrapper for flatpickr",
+  "author": {
+    "name": "Angel Careaga",
+    "email": "dev.angelcareaga@gmail.com",
+    "url": "angelcareaga.com"
+  },
+  "version": "17.0.0-rc.0",
+  "license": "MIT",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "format": "prettier --write ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AngelCareaga/ngx-flatpickr-wrapper.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AngelCareaga/ngx-flatpickr-wrapper/issues"
+  },
+  "homepage": "https://github.com/AngelCareaga/ngx-flatpickr-wrapper#readme",
+  "keywords": [
+    "angular",
+    "typescript",
+    "flatpickr",
+    "datepicker",
+    "datetimepicker",
+    "timepicker",
+    "calendar",
+    "time"
+  ],
+  "private": false,
+  "peerDependencies": {
+    "@angular/common": "^17.0.0",
+    "@angular/core": "^17.0.0",
+    "flatpickr": "^4.6.13"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}

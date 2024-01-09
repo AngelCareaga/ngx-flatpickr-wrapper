@@ -1,0 +1,79 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import 'highlight.js/styles/monokai-sublime.css';
+
+@layer components {
+  html,
+  body {
+    @apply antialiased text-gray-900 bg-white dark:bg-[#121e32] dark:text-white-dark;
+  }
+
+  /* Form */
+  .form-input,
+  .form-textarea,
+  .form-select,
+  .form-multiselect {
+    @apply w-full rounded-md border border-[#e0e6ed] bg-white px-4 py-2 text-sm font-semibold text-black focus:border-primary focus:ring-transparent dark:border-[#17263c] dark:bg-[#121e32] dark:text-white-dark dark:focus:border-primary;
+  }
+
+  .form-input-lg,
+  .form-textarea-lg,
+  .form-select-lg,
+  .form-multiselect-lg {
+    @apply py-2.5 text-base;
+  }
+  .form-input-sm,
+  .form-textarea-sm,
+  .form-select-sm,
+  .form-multiselect-sm {
+    @apply py-1.5 text-xs;
+  }
+  label {
+    @apply mb-1.5 block font-semibold;
+  }
+  [dir='rtl'] select {
+    background-position: left 0.5rem center;
+  }
+
+  .has-error .form-input,
+  .has-error .form-textarea,
+  .has-error .form-select,
+  .has-error .form-multiselect,
+  .has-error .multiselect__tags {
+    @apply border-danger bg-danger/[0.08] text-danger placeholder-danger/70 focus:border-danger;
+  }
+  .has-error .form-label,
+  .has-error .form-help,
+  .has-error .form-icon,
+  .has-error .multiselect__placeholder {
+    @apply text-danger;
+  }
+  .has-error .multiselect__input {
+    @apply bg-[#F7ECF0];
+  }
+  .has-error .multiselect__tags:hover,
+  .has-error .form-checkbox {
+    @apply border-danger;
+  }
+
+  .has-success .form-input,
+  .has-success .form-textarea,
+  .has-success .form-select,
+  .has-success .form-multiselect,
+  .has-success .multiselect__tags {
+    @apply border-success bg-success/[0.08] text-success placeholder-success/70 focus:border-success;
+  }
+  .has-success .form-label,
+  .has-success .form-help,
+  .has-success .form-icon,
+  .has-success .multiselect__placeholder {
+    @apply text-success;
+  }
+  .has-success .multiselect__input {
+    @apply bg-[#F7ECF0];
+  }
+  .has-success .multiselect__tags:hover {
+    @apply border-success;
+  }
+}
