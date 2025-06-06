@@ -34,19 +34,19 @@ jobs:
       - name: 📦 Install dependencies
         run: npm ci
 
-      - name: 🏗️ Build library
+      - name: 🏗️ Build library first
         run: npm run build:lib
 
-      - name: 🏗️ Build example app
+      - name: 🏗️ Build example app for GitHub Pages
         run: |
-          # Build con base-href para GitHub Pages
-          ng build example --base-href="/ngx-flatpickr-wrapper/"
+          # Build con base-href correcto para GitHub Pages
+          npx ng build example --configuration production --base-href="/ngx-flatpickr-wrapper/"
 
       - name: 📁 Setup Pages
-        uses: actions/configure-pages@v3
+        uses: actions/configure-pages@v4
 
       - name: 📤 Upload artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: './dist/example'
 
@@ -61,19 +61,19 @@ jobs:
     steps:
       - name: 🚀 Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
 
-      - name: 💬 Comment deployment URL
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const { owner, repo } = context.repo;
-            const deploymentUrl = '${{ steps.deployment.outputs.page_url }}';
-
-            // Create a deployment status comment
-            const body = `🎉 **Demo deployed successfully!**\n\n🔗 **Live Demo:** ${deploymentUrl}\n\n📱 Try out all the ngx-flatpickr-wrapper examples interactively.`;
-
-            // Only comment on pushes to main (not manual dispatches)
-            if (context.eventName === 'push') {
-              console.log(`Demo deployed to: ${deploymentUrl}`);
-            }
+      - name: 💬 Deployment Summary
+        run: |
+          echo "🎉 **GitHub Pages Deploy Successful!**"
+          echo ""
+          echo "🔗 **Live Demo URL:** ${{ steps.deployment.outputs.page_url }}"
+          echo "📱 **Features Available:**"
+          echo "   - Interactive date picker examples"
+          echo "   - Reactive forms integration demos"
+          echo "   - Real-time configuration testing"
+          echo ""
+          echo "📝 **Next Steps:**"
+          echo "   - Share the demo URL with users"
+          echo "   - Test all examples work correctly"
+          echo "   - Consider this URL for documentation"
