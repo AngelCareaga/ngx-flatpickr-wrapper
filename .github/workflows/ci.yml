@@ -22,6 +22,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
       - name: 📦 Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -29,9 +34,7 @@ jobs:
           cache: 'pnpm'
 
       - name: 📦 Install dependencies
-        run: |
-          corepack enable
-          pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: 🔍 Lint code
         run: pnpm run lint
@@ -63,6 +66,11 @@ jobs:
       - name: 📦 Checkout
         uses: actions/checkout@v4
 
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
       - name: 📦 Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -71,9 +79,7 @@ jobs:
           cache: 'pnpm'
 
       - name: 📦 Install dependencies
-        run: |
-          corepack enable
-          pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: 📤 Download artifacts
         uses: actions/download-artifact@v4
