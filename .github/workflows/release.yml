@@ -189,9 +189,9 @@ jobs:
 
     # 🔑 PERMISOS NECESARIOS AGREGADOS
     permissions:
-      contents: write      # Para crear tags y hacer push
-      packages: write      # Para publicar packages
-      actions: read        # Para leer artifacts
+      contents: write # Para crear tags y hacer push
+      packages: write # Para publicar packages
+      actions: read # Para leer artifacts
 
     environment:
       name: production
@@ -202,7 +202,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0  # Necesario para acceder a todos los tags
+          fetch-depth: 0 # Necesario para acceder a todos los tags
 
       - name: 📦 Setup Node.js
         uses: actions/setup-node@v4
