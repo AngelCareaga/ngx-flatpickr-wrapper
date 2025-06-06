@@ -1,0 +1,112 @@
+name: 🔄 CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ✅ Build y Lint
+  build:
+    name: 🏗️ Build & Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📦 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: 📦 Install dependencies
+        run: |
+          corepack enable
+          pnpm install --frozen-lockfile
+
+      - name: 🔍 Lint code
+        run: pnpm run lint
+
+      - name: 🏗️ Build library
+        run: pnpm run build:lib
+
+      - name: 🏗️ Build example app
+        run: pnpm run build
+
+      - name: 📤 Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path: dist/
+          retention-days: 30
+
+  # 🚀 Deploy to Staging (automático)
+  deploy-staging:
+    name: 🚀 Deploy Staging
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/develop'
+    environment:
+      name: staging
+      url: https://www.npmjs.com/package/ngx-flatpickr-wrapper
+
+    steps:
+      - name: 📦 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
+
+      - name: 📦 Install dependencies
+        run: |
+          corepack enable
+          pnpm install --frozen-lockfile
+
+      - name: 📤 Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+          path: dist/
+
+      - name: 🏷️ Create beta version
+        run: |
+          # Crear versión beta con timestamp
+          BETA_VERSION=$(node -p "require('./package.json').version")-beta.$(date +%Y%m%d%H%M%S)
+          npm version $BETA_VERSION --no-git-tag-version
+          echo "BETA_VERSION=$BETA_VERSION" >> $GITHUB_ENV
+
+      - name: 🚀 Publish to npm (beta)
+        working-directory: ./dist/ngx-flatpickr-wrapper
+        run: npm publish --tag beta --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: 💬 Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚀 **Beta version published!**\n\n` +
+                    `\`\`\`bash\n` +
+                    `npm install ngx-flatpickr-wrapper@beta\n` +
+                    `# or\n` +
+                    `npm install ngx-flatpickr-wrapper@${{ env.BETA_VERSION }}\n` +
+                    `\`\`\``
+            })

@@ -42,3 +42,7 @@ testem.log
 Thumbs.db
 
 projects/ngx-flatpickr-wrapper/node_modules/
+
+print_code_dir.sh
+
+output-single.txt

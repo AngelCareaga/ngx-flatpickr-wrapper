@@ -311,7 +311,7 @@ export class NgxFlatpickrWrapperDirective implements AfterViewInit, OnDestroy, O
     protected parent: ControlContainer,
     protected ngControl: NgControl,
     protected element: ElementRef,
-    protected renderer: Renderer2,
+    protected renderer: Renderer2
   ) {}
 
   get control(): FormControl {

@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, forwardRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  forwardRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FlatpickrOptions } from './flatpickr-options.interface';
 import 'flatpickr';
@@ -31,7 +40,7 @@ import 'flatpickr';
     },
   ],
 })
-export class NgxFlatpickrWrapperComponent implements AfterViewInit, ControlValueAccessor, OnChanges {
+export class NgxFlatpickrWrapperComponent implements AfterViewInit, ControlValueAccessor, OnChanges, OnDestroy {
   // Instance of the flatpickr library.
   public flatpickr: Object | undefined;
 
@@ -104,12 +113,16 @@ export class NgxFlatpickrWrapperComponent implements AfterViewInit, ControlValue
 
   // Sets the date in the flatpickr instance from an input value.
   setDateFromInput(date: any) {
-    this.flatpickrElement.nativeElement._flatpickr.setDate(date, true);
+    if (this.flatpickrElement?.nativeElement?._flatpickr) {
+      this.flatpickrElement.nativeElement._flatpickr.setDate(date, true);
+    }
   }
 
   // Sets the placeholder for the alt input element in the flatpickr instance.
   setAltInputPlaceholder(placeholder: string) {
-    this.flatpickrElement.nativeElement._flatpickr.altInput.setAttribute('placeholder', placeholder);
+    if (this.flatpickrElement?.nativeElement?._flatpickr?.altInput) {
+      this.flatpickrElement.nativeElement._flatpickr.altInput.setAttribute('placeholder', placeholder);
+    }
   }
 
   // Lifecycle hook that is called after the view has been initialized.
@@ -119,7 +132,7 @@ export class NgxFlatpickrWrapperComponent implements AfterViewInit, ControlValue
       Object.assign(this.defaultFlatpickrOptions, this.config);
     }
     // Initialize the flatpickr instance.
-    if (this.flatpickrElement.nativeElement.flatpickr) {
+    if (this.flatpickrElement?.nativeElement?.flatpickr) {
       this.flatpickr = this.flatpickrElement.nativeElement.flatpickr(this.defaultFlatpickrOptions);
     }
     // Set the initial date if provided.
@@ -130,7 +143,7 @@ export class NgxFlatpickrWrapperComponent implements AfterViewInit, ControlValue
 
   // Lifecycle hook called when any data-bound property of a directive changes.
   ngOnChanges(changes: SimpleChanges) {
-    if (this.flatpickrElement.nativeElement && this.flatpickrElement.nativeElement._flatpickr) {
+    if (this.flatpickrElement?.nativeElement?._flatpickr) {
       // Update the date if it has been changed.
       if (changes.hasOwnProperty('setDate') && changes['setDate'].currentValue) {
         this.setDateFromInput(changes['setDate'].currentValue);
@@ -145,6 +158,14 @@ export class NgxFlatpickrWrapperComponent implements AfterViewInit, ControlValue
       ) {
         this.setAltInputPlaceholder(changes['placeholder'].currentValue);
       }
+    }
+  }
+
+  // Lifecycle hook called when component is destroyed.
+  ngOnDestroy() {
+    // Clean up flatpickr instance to prevent memory leaks.
+    if (this.flatpickrElement?.nativeElement?._flatpickr) {
+      this.flatpickrElement.nativeElement._flatpickr.destroy();
     }
   }
 

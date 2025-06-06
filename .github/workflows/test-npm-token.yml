@@ -1,0 +1,22 @@
+name: 🧪 Test NPM Token
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: 🧪 Test NPM Token
+        run: |
+          echo "Testing NPM authentication..."
+          npm whoami
+          echo "✅ NPM Token is valid!"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

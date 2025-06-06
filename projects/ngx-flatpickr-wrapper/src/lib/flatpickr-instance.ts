@@ -14,11 +14,11 @@ export abstract class FlatpickrInstance {
   altInput?: HTMLElement;
   /**  This is the div.flatpickr-calendar element. */
   calendarContainer?: HTMLElement;
-  /** The “left arrow” element responsible for decrementing the current month. */
+  /** The "left arrow" element responsible for decrementing the current month. */
   prevMonthNav?: HTMLElement;
-  /** The “right arrow” element responsible for incrementing the current month. */
+  /** The "right arrow" element responsible for incrementing the current month. */
   nextMonthNav?: HTMLElement;
-  /** The span holding the current month’s name. */
+  /** The span holding the current month's name. */
   currentMonthElement?: HTMLElement;
   /** The input holding the current year. */
   currentYearElement?: HTMLElement;
@@ -40,7 +40,7 @@ export abstract class FlatpickrInstance {
   /** A string representation of date, formatted as per format. */
   abstract formatDate(date: Date, format: string): string;
 
-  /** Sets the calendar view to the year and month of date, which can be a date string, a Date, or nothing. If date is undefined, the view is set to the latest selected date, the minDate, or today’s date */
+  /** Sets the calendar view to the year and month of date, which can be a date string, a Date, or nothing. If date is undefined, the view is set to the latest selected date, the minDate, or today's date */
   abstract jumpToDate(date?: Date | string): void;
 
   /** Shows/opens the calendar. */
@@ -49,13 +49,13 @@ export abstract class FlatpickrInstance {
   /** Parses a date string or a timestamp, and returns a Date. */
   abstract parseDate(date: string, format: string): Date;
 
-  /** Redraws the calendar. Shouldn’t be necessary in most cases. */
+  /** Redraws the calendar. Shouldn't be necessary in most cases. */
   abstract redraw(): void;
 
   /** Sets a config option to value, redrawing the calendar and updating the current view, if necessary. */
   abstract set(option: string, value: any): void;
 
-  /** Sets the current selected date(s) to date, which can be a date string, a Date, or an Array of the Dates. Optionally, pass true as the second argument to force any onChange events to fire. And if you’re passing a date string with a format other than your dateFormat, provide a dateFormat e.g. "m/d/Y". */
+  /** Sets the current selected date(s) to date, which can be a date string, a Date, or an Array of the Dates. Optionally, pass true as the second argument to force any onChange events to fire. And if you're passing a date string with a format other than your dateFormat, provide a dateFormat e.g. "m/d/Y". */
   abstract setDate(date: Date | string | Date[], triggerChange: boolean, dateFormat: string): void;
 
   /** Shows/opens the calendar if its closed, hides/closes it otherwise. */

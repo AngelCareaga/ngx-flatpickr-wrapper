@@ -1,79 +1,194 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-@import 'highlight.js/styles/monokai-sublime.css';
+/* ./projects/example/src/styles.scss */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+@import "highlight.js/styles/github-dark.css";
 
-@layer components {
+:root {
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@layer base {
   html,
   body {
-    @apply antialiased text-gray-900 bg-white dark:bg-[#121e32] dark:text-white-dark;
+    @apply antialiased font-sans;
+    @apply text-neutral-900 bg-neutral-50;
+    @apply transition-colors duration-300;
   }
 
-  /* Form */
+  .dark {
+    @apply text-neutral-50 bg-black;
+  }
+
+  * {
+    @apply transition-colors;
+    transition-duration: var(--transition-normal);
+  }
+}
+
+@layer components {
   .form-input,
   .form-textarea,
   .form-select,
   .form-multiselect {
-    @apply w-full rounded-md border border-[#e0e6ed] bg-white px-4 py-2 text-sm font-semibold text-black focus:border-primary focus:ring-transparent dark:border-[#17263c] dark:bg-[#121e32] dark:text-white-dark dark:focus:border-primary;
+    @apply w-full rounded-xl border border-neutral-300 bg-white px-4 py-3 text-base font-medium text-neutral-900;
+    @apply focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none;
+    @apply transition-all duration-200 ease-out;
+    @apply placeholder:text-neutral-500;
   }
 
-  .form-input-lg,
-  .form-textarea-lg,
-  .form-select-lg,
-  .form-multiselect-lg {
-    @apply py-2.5 text-base;
-  }
-  .form-input-sm,
-  .form-textarea-sm,
-  .form-select-sm,
-  .form-multiselect-sm {
-    @apply py-1.5 text-xs;
-  }
-  label {
-    @apply mb-1.5 block font-semibold;
-  }
-  [dir='rtl'] select {
-    background-position: left 0.5rem center;
+  .dark .form-input,
+  .dark .form-textarea,
+  .dark .form-select,
+  .dark .form-multiselect {
+    @apply border-neutral-700 bg-neutral-900 text-neutral-100;
+    @apply focus:border-primary-400 focus:ring-primary-400/20;
+    @apply placeholder:text-neutral-400;
   }
 
-  .has-error .form-input,
-  .has-error .form-textarea,
-  .has-error .form-select,
-  .has-error .form-multiselect,
-  .has-error .multiselect__tags {
-    @apply border-danger bg-danger/[0.08] text-danger placeholder-danger/70 focus:border-danger;
-  }
-  .has-error .form-label,
-  .has-error .form-help,
-  .has-error .form-icon,
-  .has-error .multiselect__placeholder {
-    @apply text-danger;
-  }
-  .has-error .multiselect__input {
-    @apply bg-[#F7ECF0];
-  }
-  .has-error .multiselect__tags:hover,
-  .has-error .form-checkbox {
-    @apply border-danger;
+  .text-display {
+    @apply text-2xl font-bold tracking-tight;
   }
 
-  .has-success .form-input,
-  .has-success .form-textarea,
-  .has-success .form-select,
-  .has-success .form-multiselect,
-  .has-success .multiselect__tags {
-    @apply border-success bg-success/[0.08] text-success placeholder-success/70 focus:border-success;
+  .text-title {
+    @apply text-xl font-semibold tracking-tight;
   }
-  .has-success .form-label,
-  .has-success .form-help,
-  .has-success .form-icon,
-  .has-success .multiselect__placeholder {
-    @apply text-success;
+
+  .text-heading {
+    @apply text-lg font-semibold;
   }
-  .has-success .multiselect__input {
-    @apply bg-[#F7ECF0];
+
+  .text-body {
+    @apply text-base font-normal;
   }
-  .has-success .multiselect__tags:hover {
-    @apply border-success;
+
+  .text-body-medium {
+    @apply text-base font-medium;
   }
+
+  .text-small {
+    @apply text-sm font-normal;
+  }
+
+  .text-caption {
+    @apply text-xs font-medium;
+  }
+
+  .text-emphasis {
+    @apply font-semibold;
+  }
+
+  .text-muted {
+    @apply text-neutral-600;
+  }
+
+  .dark .text-muted {
+    @apply text-neutral-400;
+  }
+
+  .hover-lift:hover {
+    @apply transform -translate-y-0.5;
+  }
+
+  .hover-scale:hover {
+    @apply transform scale-105;
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.2s ease-out;
+  }
+}
+
+/* Flatpickr Dark Mode Styling */
+.dark .flatpickr-calendar {
+  @apply bg-neutral-950 border-neutral-800 shadow-large;
+}
+
+.dark .flatpickr-calendar .flatpickr-months {
+  @apply bg-neutral-950;
+}
+
+.dark .flatpickr-calendar .flatpickr-month {
+  @apply text-neutral-200;
+}
+
+.dark .flatpickr-calendar .flatpickr-weekday {
+  @apply text-neutral-400;
+}
+
+.dark .flatpickr-calendar .flatpickr-day {
+  @apply text-neutral-300 hover:bg-neutral-800;
+}
+
+.dark .flatpickr-calendar .flatpickr-day.selected {
+  @apply bg-primary-600 border-primary-600 text-white;
+}
+
+.dark .flatpickr-calendar .flatpickr-day.today {
+  @apply border-primary-500;
+}
+
+.dark .flatpickr-calendar .flatpickr-day.inRange {
+  @apply bg-primary-600/20 border-primary-600/20;
+}
+
+.dark .flatpickr-calendar .flatpickr-time {
+  @apply border-neutral-700;
+}
+
+.dark .flatpickr-calendar .flatpickr-time input {
+  @apply text-neutral-300 bg-transparent;
+}
+
+/* Code highlighting */
+pre code.hljs {
+  @apply overflow-x-auto rounded-xl bg-neutral-900 p-6 text-neutral-100;
+  @apply border border-neutral-800;
+}
+
+.dark pre code.hljs {
+  @apply bg-black border-neutral-900;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-neutral-100;
+}
+
+.dark ::-webkit-scrollbar-track {
+  @apply bg-neutral-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-neutral-400 rounded-lg;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  @apply bg-neutral-600;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-neutral-500;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  @apply bg-neutral-500;
 }

@@ -1,12 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 const plugin = require('tailwindcss/plugin');
-const rotateX = plugin(function ({ addUtilities }) {
-  addUtilities({
-    '.rotate-y-180': {
-      transform: 'rotateY(180deg)',
-    },
-  });
-});
+
 module.exports = {
   darkMode: 'class',
   important: true,
@@ -18,101 +12,92 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#4361ee',
-          light: '#eaf1ff',
-          'dark-light': 'rgba(67,97,238,.15)',
+          50: '#f0f4ff',
+          100: '#e0e7ff',
+          200: '#c7d2fe',
+          300: '#a5b4fc',
+          400: '#818cf8',
+          500: '#6366f1',
+          600: '#4f46e5',
+          700: '#4338ca',
+          800: '#3730a3',
+          900: '#312e81',
+          950: '#1e1b4b',
         },
-        secondary: {
-          DEFAULT: '#805dca',
-          light: '#ebe4f7',
-          'dark-light': 'rgb(128 93 202 / 15%)',
+        neutral: {
+          50: '#fafafa',
+          100: '#f5f5f5',
+          200: '#e5e5e5',
+          300: '#d4d4d4',
+          400: '#a3a3a3',
+          500: '#737373',
+          600: '#525252',
+          700: '#404040',
+          800: '#262626',
+          900: '#171717',
+          950: '#0a0a0a',
         },
         success: {
-          DEFAULT: '#00ab55',
-          light: '#ddf5f0',
-          'dark-light': 'rgba(0,171,85,.15)',
-        },
-        danger: {
-          DEFAULT: '#e7515a',
-          light: '#fff5f5',
-          'dark-light': 'rgba(231,81,90,.15)',
+          400: '#4ade80',
+          500: '#22c55e',
+          600: '#16a34a',
         },
         warning: {
-          DEFAULT: '#e2a03f',
-          light: '#fff9ed',
-          'dark-light': 'rgba(226,160,63,.15)',
+          400: '#fbbf24',
+          500: '#f59e0b',
+          600: '#d97706',
         },
-        info: {
-          DEFAULT: '#2196f3',
-          light: '#e7f7ff',
-          'dark-light': 'rgba(33,150,243,.15)',
-        },
-        dark: {
-          DEFAULT: '#3b3f5c',
-          light: '#eaeaec',
-          'dark-light': 'rgba(59,63,92,.15)',
-        },
-        black: {
-          DEFAULT: '#0e1726',
-          light: '#e3e4eb',
-          'dark-light': 'rgba(14,23,38,.15)',
-        },
-        white: {
-          DEFAULT: '#ffffff',
-          light: '#e0e6ed',
-          dark: '#888ea8',
+        error: {
+          400: '#f87171',
+          500: '#ef4444',
+          600: '#dc2626',
         },
       },
       fontFamily: {
-        nunito: ['Nunito', 'sans-serif'],
+        sans: [
+          'Inter',
+          'ui-sans-serif',
+          'system-ui',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          'SF Pro Text',
+          'Segoe UI Variable',
+          'Segoe UI',
+          'Roboto',
+          'Helvetica Neue',
+          'sans-serif',
+        ],
+      },
+      boxShadow: {
+        soft: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+        medium: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        large: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.3s ease-out',
+        'slide-up': 'slideUp 0.3s ease-out',
+        'scale-in': 'scaleIn 0.2s ease-out',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        slideUp: {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        scaleIn: {
+          '0%': { opacity: '0', transform: 'scale(0.95)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+      },
+      transitionTimingFunction: {
+        modern: 'cubic-bezier(0.4, 0, 0.2, 1)',
       },
       spacing: {
         4.5: '18px',
       },
-      boxShadow: {
-        '3xl': '0 2px 2px rgb(224 230 237 / 46%), 1px 6px 7px rgb(224 230 237 / 46%)',
-      },
-      typography: ({ theme }) => ({
-        DEFAULT: {
-          css: {
-            '--tw-prose-invert-headings': theme('colors.white.dark'),
-            '--tw-prose-invert-links': theme('colors.white.dark'),
-            h1: {
-              fontSize: '40px',
-              marginBottom: '0.5rem',
-              marginTop: 0,
-            },
-            h2: {
-              fontSize: '32px',
-              marginBottom: '0.5rem',
-              marginTop: 0,
-            },
-            h3: {
-              fontSize: '28px',
-              marginBottom: '0.5rem',
-              marginTop: 0,
-            },
-            h4: {
-              fontSize: '24px',
-              marginBottom: '0.5rem',
-              marginTop: 0,
-            },
-            h5: {
-              fontSize: '20px',
-              marginBottom: '0.5rem',
-              marginTop: 0,
-            },
-            h6: {
-              fontSize: '16px',
-              marginBottom: '0.5rem',
-              marginTop: 0,
-            },
-            p: { marginBottom: '0.5rem' },
-            li: { margin: 0 },
-            img: { margin: 0 },
-          },
-        },
-      }),
     },
   },
   plugins: [
@@ -120,6 +105,48 @@ module.exports = {
       strategy: 'class',
     }),
     require('@tailwindcss/typography'),
-    rotateX,
+    plugin(function ({ addUtilities, addComponents }) {
+      addUtilities({
+        '.rotate-y-180': {
+          transform: 'rotateY(180deg)',
+        },
+      });
+
+      addComponents({
+        '.glass-effect': {
+          '@apply bg-white/80 backdrop-blur-xl border border-neutral-200/60': {},
+          '.dark &': {
+            '@apply bg-black/80 border-neutral-800/60': {},
+          },
+        },
+        '.card-modern': {
+          '@apply bg-white rounded-2xl shadow-soft border border-neutral-200/50 transition-all duration-300': {},
+          '.dark &': {
+            '@apply bg-neutral-950 border-neutral-800/50': {},
+          },
+          '&:hover': {
+            '@apply shadow-medium': {},
+          },
+        },
+        '.btn-primary': {
+          '@apply bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white font-medium py-3 px-6 rounded-xl shadow-soft hover:shadow-medium transition-all duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-primary-500/20':
+            {},
+        },
+        '.btn-secondary': {
+          '@apply bg-neutral-100 hover:bg-neutral-200 text-neutral-900 font-medium py-3 px-6 rounded-xl shadow-soft hover:shadow-medium transition-all duration-200 ease-out':
+            {},
+          '.dark &': {
+            '@apply bg-neutral-800 hover:bg-neutral-700 text-neutral-100': {},
+          },
+        },
+        '.btn-ghost': {
+          '@apply bg-transparent hover:bg-neutral-100 text-neutral-700 font-medium py-2 px-4 rounded-lg transition-all duration-200 ease-out':
+            {},
+          '.dark &': {
+            '@apply hover:bg-neutral-800 text-neutral-300': {},
+          },
+        },
+      });
+    }),
   ],
 };
