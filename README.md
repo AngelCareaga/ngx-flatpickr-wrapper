@@ -11,7 +11,7 @@
 
 **A lightweight Angular wrapper for flatpickr with full reactive forms support**
 
-[Live Examples](https://mezoistvan.github.io/ngx-flatpickr-wrapper-examples/) • [Flatpickr Documentation](https://chmln.github.io/flatpickr/options/) • [Report Bug](https://github.com/AngelCareaga/ngx-flatpickr-wrapper/issues)
+[Live Examples](https://angelcareaga.github.io/ngx-flatpickr-wrapper/) • [Flatpickr Documentation](https://chmln.github.io/flatpickr/options/) • [Report Bug](https://github.com/AngelCareaga/ngx-flatpickr-wrapper/issues)
 
 </div>
 
