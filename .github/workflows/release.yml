@@ -23,10 +23,60 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # 🏗️ Preparar Release
+  # 🔍 Validar cambios de versión
+  check-version:
+    name: 🔍 Check Version Changes
+    runs-on: ubuntu-latest
+    outputs:
+      should-release: ${{ steps.version-check.outputs.should-release }}
+      current-version: ${{ steps.version-check.outputs.current-version }}
+      npm-version: ${{ steps.version-check.outputs.npm-version }}
+
+    steps:
+      - name: 📦 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: 🔍 Check package version
+        id: version-check
+        run: |
+          # Obtener versión actual del package.json
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          echo "current-version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+          # Verificar si el paquete existe en npm
+          if npm view ngx-flatpickr-wrapper@$CURRENT_VERSION version 2>/dev/null; then
+            NPM_VERSION=$(npm view ngx-flatpickr-wrapper@$CURRENT_VERSION version)
+            echo "npm-version=$NPM_VERSION" >> $GITHUB_OUTPUT
+            echo "should-release=false" >> $GITHUB_OUTPUT
+            echo "❌ La versión $CURRENT_VERSION ya existe en npm"
+            exit 0
+          else
+            # Obtener la última versión publicada
+            LATEST_NPM_VERSION=$(npm view ngx-flatpickr-wrapper version 2>/dev/null || echo "0.0.0")
+            echo "npm-version=$LATEST_NPM_VERSION" >> $GITHUB_OUTPUT
+            echo "should-release=true" >> $GITHUB_OUTPUT
+            echo "✅ Nueva versión $CURRENT_VERSION lista para publicar (última: $LATEST_NPM_VERSION)"
+          fi
+
+      - name: 📊 Version Summary
+        run: |
+          echo "📋 **Resumen de Versiones:**"
+          echo "   - Versión actual: ${{ steps.version-check.outputs.current-version }}"
+          echo "   - Versión en npm: ${{ steps.version-check.outputs.npm-version }}"
+          echo "   - ¿Debe publicar?: ${{ steps.version-check.outputs.should-release }}"
+
+  # 🏗️ Preparar Release (solo si hay cambios)
   prepare-release:
     name: 🏗️ Prepare Release
     runs-on: ubuntu-latest
+    needs: check-version
+    if: needs.check-version.outputs.should-release == 'true'
     outputs:
       new-version: ${{ steps.version.outputs.new-version }}
       release-notes: ${{ steps.notes.outputs.release-notes }}
@@ -99,11 +149,39 @@ jobs:
             LICENSE
           retention-days: 30
 
-  # ⏸️ AUTORIZACIÓN REQUERIDA PARA PRODUCCIÓN
+  # ⚠️ Notificar si no hay cambios
+  notify-no-changes:
+    name: ⚠️ No Changes to Publish
+    runs-on: ubuntu-latest
+    needs: check-version
+    if: needs.check-version.outputs.should-release == 'false'
+
+    steps:
+      - name: ⚠️ Version already exists
+        run: |
+          echo "⚠️ **No se puede publicar**"
+          echo ""
+          echo "La versión **${{ needs.check-version.outputs.current-version }}** ya existe en npm."
+          echo ""
+          echo "🔧 **Para publicar una nueva versión:**"
+          echo "1. Actualiza la versión en package.json"
+          echo "2. Haz commit y push de los cambios"
+          echo "3. Ejecuta este workflow nuevamente"
+          echo ""
+          echo "🛠️ **Comandos útiles:**"
+          echo "\`\`\`bash"
+          echo "npm version patch  # Para bug fixes"
+          echo "npm version minor  # Para nuevas features"
+          echo "npm version major  # Para breaking changes"
+          echo "\`\`\`"
+          exit 1
+
+  # 🚀 Publicar a producción (solo con autorización y cambios)
   publish-production:
     name: 🚀 Publish to Production
     runs-on: ubuntu-latest
-    needs: prepare-release
+    needs: [check-version, prepare-release]
+    if: needs.check-version.outputs.should-release == 'true'
     environment:
       name: production
       url: https://www.npmjs.com/package/ngx-flatpickr-wrapper
@@ -160,12 +238,15 @@ jobs:
             npm install ngx-flatpickr-wrapper@${{ needs.prepare-release.outputs.new-version }}
             ```
 
+            ### 🌐 Demo en vivo
+            [📱 Ver ejemplos interactivos](https://angelcareaga.github.io/ngx-flatpickr-wrapper/)
+
             ### 📝 Cambios
             ${{ needs.prepare-release.outputs.release-notes }}
 
             ### 🔗 Enlaces útiles
             - [📖 Documentación](https://github.com/AngelCareaga/ngx-flatpickr-wrapper#readme)
-            - [🧪 Ejemplos en vivo](https://mezoistvan.github.io/ngx-flatpickr-wrapper-examples/)
+            - [🧪 Ejemplos en vivo](https://angelcareaga.github.io/ngx-flatpickr-wrapper/)
             - [📦 NPM Package](https://www.npmjs.com/package/ngx-flatpickr-wrapper)
           draft: false
           prerelease: ${{ inputs.prerelease }}
@@ -176,3 +257,4 @@ jobs:
           echo "✅ Release ${{ needs.prepare-release.outputs.new-version }} publicada exitosamente!"
           echo "📦 NPM: https://www.npmjs.com/package/ngx-flatpickr-wrapper"
           echo "🏷️ GitHub: https://github.com/${{ github.repository }}/releases/tag/${{ needs.prepare-release.outputs.new-version }}"
+          echo "🌐 Demo: https://angelcareaga.github.io/ngx-flatpickr-wrapper/"

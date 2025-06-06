@@ -23,7 +23,12 @@
     "release:patch": "gh workflow run release.yml -f release_type=patch",
     "release:minor": "gh workflow run release.yml -f release_type=minor",
     "release:major": "gh workflow run release.yml -f release_type=major",
-    "release:beta": "gh workflow run release.yml -f release_type=patch -f prerelease=true"
+    "release:beta": "gh workflow run release.yml -f release_type=patch -f prerelease=true",
+    "demo:deploy": "gh workflow run github-pages.yml",
+    "version:check": "npm view ngx-flatpickr-wrapper version",
+    "version:bump:patch": "npm version patch && git push && git push --tags",
+    "version:bump:minor": "npm version minor && git push && git push --tags",
+    "version:bump:major": "npm version major && git push && git push --tags"
   },
   "repository": {
     "type": "git",

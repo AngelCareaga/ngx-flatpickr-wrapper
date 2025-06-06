@@ -1,0 +1,79 @@
+name: 🌐 Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Build job
+  build:
+    name: 🏗️ Build Demo App
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📦 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🏗️ Build library
+        run: npm run build:lib
+
+      - name: 🏗️ Build example app
+        run: |
+          # Build con base-href para GitHub Pages
+          ng build example --base-href="/ngx-flatpickr-wrapper/"
+
+      - name: 📁 Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: 📤 Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: './dist/example'
+
+  # Deployment job
+  deploy:
+    name: 🚀 Deploy to GitHub Pages
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
+
+      - name: 💬 Comment deployment URL
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const deploymentUrl = '${{ steps.deployment.outputs.page_url }}';
+
+            // Create a deployment status comment
+            const body = `🎉 **Demo deployed successfully!**\n\n🔗 **Live Demo:** ${deploymentUrl}\n\n📱 Try out all the ngx-flatpickr-wrapper examples interactively.`;
+
+            // Only comment on pushes to main (not manual dispatches)
+            if (context.eventName === 'push') {
+              console.log(`Demo deployed to: ${deploymentUrl}`);
+            }
