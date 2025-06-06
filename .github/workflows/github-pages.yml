@@ -42,13 +42,29 @@ jobs:
           # Build con base-href correcto para GitHub Pages
           npx ng build example --configuration production --base-href="/ngx-flatpickr-wrapper/"
 
+      - name: 📁 Verify build output
+        run: |
+          echo "📋 Verificando estructura de archivos:"
+          ls -la dist/example/
+          echo ""
+          echo "📋 Contenido de browser/:"
+          ls -la dist/example/browser/
+          echo ""
+          echo "🔍 Verificando que index.html existe:"
+          if [ -f "dist/example/browser/index.html" ]; then
+            echo "✅ index.html encontrado en browser/"
+          else
+            echo "❌ index.html NO encontrado en browser/"
+            exit 1
+          fi
+
       - name: 📁 Setup Pages
         uses: actions/configure-pages@v4
 
       - name: 📤 Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist/example'
+          path: './dist/example/browser'
 
   # Deployment job
   deploy:
@@ -77,3 +93,5 @@ jobs:
           echo "   - Share the demo URL with users"
           echo "   - Test all examples work correctly"
           echo "   - Consider this URL for documentation"
+          echo ""
+          echo "📂 **Deployed from:** dist/example/browser/"
