@@ -1,24 +1,28 @@
 version: 2
 updates:
-  - package-ecosystem: 'npm'
-    directory: '/'
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
-      interval: 'weekly'
-    reviewers:
-      - 'AngelCareaga'
+      interval: "weekly"
     assignees:
-      - 'AngelCareaga'
+      - "AngelCareaga"
     commit-message:
-      prefix: 'chore'
-      include: 'scope'
+      prefix: "chore"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "npm"
+    open-pull-requests-limit: 5
 
-  - package-ecosystem: 'github-actions'
-    directory: '/'
+  - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
-      interval: 'weekly'
-    reviewers:
-      - 'AngelCareaga'
+      interval: "weekly"
     assignees:
-      - 'AngelCareaga'
+      - "AngelCareaga"
     commit-message:
-      prefix: 'ci'
+      prefix: "ci"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "github-actions"
